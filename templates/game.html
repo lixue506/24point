@@ -22,7 +22,26 @@
 
     <script src="../static/js/jquery.min.js"></script>
 	<script type="text/javascript" src="../static/js/modernizr.custom.js"></script>
-</head>
+    <script>
+    window.onload = function() {
+        document.body.addEventListener("click", myFunction);
+    };
+    function myFunction (e) {
+        console.log(e.target.value);
+        console.log(e.target.class);
+        if (e.target.class == "num_cal") {
+            var tmp = e.target.value;
+            document.getElementById('cal').value += tmp;}
+        else if (e.target.id == "back") {
+            var tmp = document.getElementById('cal');
+            if (tmp.value.length > 0) {
+                tmp.value = tmp.value.substring(0, tmp.value.length - 1);
+            }
+            console.log(tmp.value.length);
+        }
+    }
+   </script>
+  </head>
 
 <body data-spy="scroll" data-offset="0" data-target="#navbar-main">
 
@@ -35,25 +54,46 @@
                 <div class="navbar-collapse collapse" >
 					<ul class="nav navbar-nav">
 						<li class="dropdown">
-							<a onclick="look();return false" class="dropdown-toggle" data-toggle="dropdown">Help</a>
+							<a href="https://github.com/lixue506/24point" class="dropdown-toggle" data-toggle="dropdown">about</a>
                         </li>
                         <li class="dropdown">
-							<a href="https://github.com/lixue506/24point" class="dropdown-toggle" data-toggle="dropdown">about</a>
+							<a href="index.html" class="dropdown-toggle" data-toggle="dropdown">BACK</a>
                         </li>
                     </ul>
                 </div>
 			</div>
 		</div>
     </div>
-    <form method="get">
-        <input>
-    </form>
+
+    <div id="headerwrap" name="home" class="fullheight">
+		<header class="clearfix fullheight">
+			<div class="vertical-center">
+                <form name="random_num"></form>
+                <input id="cal">
+                <ul >
+                <a class="btn homebtn smoothScroll">START</a>
+                <a class="btn homebtn smoothScroll" onclick="location=location" id="reset">RESET</a>
+                <a class="btn homebtn smoothScroll" id="submit" onclick="func()">SUBMIT</a>
+                <a class="btn homebtn smoothScroll" id="help">HELP</a>
+                <a class="btn homebtn smoothScroll" id="back">BACK</a>
+                </ul>
+	 		</div>
+  		</header>
+    </div>
+
 <script>
-    function look() {
-
-
+    ope = ['+','-','*','/','(',')'];
+    for (i = 0; i < 10; i++) {
+        var str_html = document.createElement("input");
+        str_html.type = "button";
+        str_html.class = "num_cal";
+        if(i < 6){str_html.value = ope[i];}
+        else{str_html.value = Math.floor(Math.random()*10+1);}
+        document.random_num.appendChild(str_html);
     }
- function func() {
+</script>
+<script>
+function func() {
         $.ajax({
             url:'/game',
             type:'GET',
@@ -71,7 +111,6 @@
         })
     }
 </script>
-
 	<script type="text/javascript" src="../static/js/bootstrap.js"></script>
     <script type="text/javascript" src="../static/js/plugins.js"></script>
 	<script type="text/javascript" src="../static/js/init.js"></script>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试代码</title>
+    <script>
+    window.onload = function() {
+        document.body.addEventListener("click", myFunction);
+    };
+    function myFunction (e) {
+       console.log(e.target.value);
+       console.log(e.target.class);
+       if(e.target.class=="class_num")
+       {
+           var tmp = e.target.value;
+           document.getElementById('cal').value += tmp;
+       }
+       else if(e.target.id=="back")
+       {
+           var tmp = document.getElementById('cal');
+           if (tmp.value.length>0)
+           {tmp.value = tmp.value.substring(0,tmp.value.length-1);}
+           console.log(tmp.value.length);
+       }
+       else if(e.target.id=='submit')
+       {
+           var stack = document.getElementById('cal').value;
+           var q = new Stack();
+           for(var i=stack.length; i>0; i--)
+           {
+               
+           }
+       }
+    }
+    
+    function cmp(c) {
+        if(c=='+'||c=='-') return 1;
+        else if(c=='*'||c=='/') return 2;
+        else if(c=='('||c==')') return 0;
+        return -1;
+    }
+    function jisuan(x,y,c) {
+        if(c=='+')return y+x;
+        else if(c=='-') return y-x;
+        else if(c=='*') return y*x;
+        else return y/x;
+    }
+</script>
+</head>
+<body>
+<form name="ramdom_num">
+
+    <input id="cal">
+
+    <ul >
+
+        <input type="reset" onclick="location=location" id="reset" value="RESET" >
+
+        <input type="submit" id="submit" onclick="func()" value="SUMIT" >
+
+        <input type="button" id="help" value="HELP" >
+
+        <input type="button" id="back" value="BACK" >
+
+    </ul>
+
+</form>
+<script>
+        ope = ['+','-','*','/','(',')'];
+		for (i = 0; i < 10; i++) {
+		    var str_html = document.createElement("input");
+            str_html.type = "button";
+            str_html.class = "class_num";
+		    if(i < 6){str_html.value = ope[i];}
+		    else{str_html.value = Math.floor(Math.random()*10+1);}
+		    document.ramdom_num.appendChild(str_html);
+        }
+</script>
+<script>
+    function func() {
+       $.ajax({
+            url:'/game',
+            type:'GET',
+            data:{'cal_str':$('cal').val()},
+            dataType:'json',
+            success:function (data) {
+                str = ''
+                for (var item in data) {
+                }$('#get_result').html(str)
+            },
+            error:function () {
+                alert("ERROR!");
+            }
+        })
+    }
+</script>
+</body>
+</html>

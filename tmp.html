@@ -1,0 +1,296 @@
+直接上代码来说吧：
+(function(window){
+var PorkeGame=function(){
+        this.fourPorke=[];
+        this.result=[];
+        this.yunsuanfu=['+','-','*','/','(',')'];
+        this.r=[];
+    }
+    var p=PorkeGame.prototype;
+    //从min和max之间产生一个随机数
+    p._getRandomNumber=function(min,max){
+        var total = max -min + 1;
+        return Math.floor(Math.random() * total) + min;
+    }
+    //产生随机数
+    p.randomFourPorke=function(){
+        for(var i=1;i<=4;i++){
+            this.r.push(this._getRandomNumber(1,9));
+        }
+        return this.r;
+    }
+    p.operator=function(arr){
+       var array=['+','-','*','/','(',')',1,2,3,4,5,6,7,8,9];
+        for(var j=0;j<array.length;j++){
+          if(array[j]==arr){
+            return array[j];
+          }
+       }
+    }
+   //经过各种运算后输出24点计算结果
+   p.replacement=function(){
+    var ten=[],str="",count=0,arr1=[],arr2=[];
+    arr2=this.randomFourPorke();
+    for(var i=1;i<=4;i++){
+       arr1.push(arr2.shift());
+    }
+    ten=this.createAllExprestion(arr1);
+     if(ten == undefined){
+        document.getElementById("source").firstChild.innerHTML="No";
+        document.getElementById("source").firstChild.className="one";
+        return arr1;
+     }else{
+        for(var i=0;i<=10;i++){
+            if(this.operator((ten.toString().substr(i,1)))=="+"){
+                str+='<img src="imgs/1.png"/>';
+            }
+            if(this.operator((ten.toString().substr(i,1)))=='-'){
+                str+='<img src="imgs/2.png"/>';
+            }
+            if(this.operator((ten.toString().substr(i,1)))=='*'){
+                str+='<img src="imgs/3.png"/>';
+            }
+            if(this.operator((ten.toString().substr(i,1)))=='/'){
+                str+='<img src="imgs/4.png"/>';
+            }
+            if(this.operator((ten.toString().substr(i,1)))=="("){
+                str+='<img src="imgs/leftbracket.png"/>';
+            }
+            if(this.operator((ten.toString().substr(i,1)))==")"){
+                str+='<img src="imgs/rightbracket.png"/>';
+            }
+            if(this.operator((ten.toString().substr(i,1)))=="1"){
+                str+=1;
+            }
+            if(this.operator((ten.toString().substr(i,1)))=='2'){
+                str+=2;
+            }
+            if(this.operator((ten.toString().substr(i,1)))=='3'){
+                str+=3;
+            }
+            if(this.operator((ten.toString().substr(i,1)))=='4'){
+                str+=4;
+            }
+            if(this.operator((ten.toString().substr(i,1)))=="5"){
+                str+=5;
+            }
+            if(this.operator((ten.toString().substr(i,1)))=="6"){
+                str+=6;
+            }
+            if(this.operator((ten.toString().substr(i,1)))=='7'){
+                str+=7;
+            }
+            if(this.operator((ten.toString().substr(i,1)))=="8"){
+                str+=8;
+            }
+            if(this.operator((ten.toString().substr(i,1)))=="9"){
+                str+=9;
+            }
+        }
+        document.getElementById("source").firstChild.innerHTML=str;
+        document.getElementById("source").firstChild.className="one";
+        return arr1;
+     }    
+}
+
+//生成所有扑克的组合
+p._getRandomPorkeIndex=function(arr1){
+    var tem= [];
+    tem.push([arr1[0],arr1[1],arr1[2],arr1[3]]);
+    tem.push([arr1[0],arr1[1],arr1[3],arr1[2]]);
+    tem.push([arr1[0],arr1[2],arr1[1],arr1[3]]);
+    tem.push([arr1[0],arr1[2],arr1[3],arr1[1]]);
+    tem.push([arr1[0],arr1[3],arr1[2],arr1[1]]);
+    tem.push([arr1[0],arr1[3],arr1[1],arr1[2]]);
+    tem.push([arr1[1],arr1[0],arr1[2],arr1[3]]);
+    tem.push([arr1[1],arr1[0],arr1[3],arr1[2]]);
+    tem.push([arr1[1],arr1[2],arr1[0],arr1[3]]);
+    tem.push([arr1[1],arr1[2],arr1[3],arr1[0]]);
+    tem.push([arr1[1],arr1[3],arr1[2],arr1[0]]);
+    tem.push([arr1[1],arr1[3],arr1[0],arr1[2]]);
+    tem.push([arr1[2],arr1[1],arr1[0],arr1[3]]);
+    tem.push([arr1[2],arr1[1],arr1[3],arr1[0]]);
+    tem.push([arr1[2],arr1[0],arr1[1],arr1[3]]);
+    tem.push([arr1[2],arr1[0],arr1[3],arr1[1]]);
+    tem.push([arr1[2],arr1[3],arr1[0],arr1[1]]);
+    tem.push([arr1[2],arr1[3],arr1[1],arr1[0]]);
+    tem.push([arr1[3],arr1[1],arr1[0],arr1[2]]);
+    tem.push([arr1[3],arr1[1],arr1[2],arr1[0]]);
+    tem.push([arr1[3],arr1[0],arr1[1],arr1[2]]);
+    tem.push([arr1[3],arr1[0],arr1[2],arr1[1]]);
+    tem.push([arr1[3],arr1[2],arr1[0],arr1[1]]);
+    tem.push([arr1[3],arr1[2],arr1[1],arr1[0]]);
+        return tem;
+}
+
+//生成所有符合计算的运算符的组合
+p._getRandomOptIndex=function(){
+    var temArr = [];
+    temArr.push([this.yunsuanfu[0],this.yunsuanfu[1],this.yunsuanfu[2]]);
+    temArr.push([this.yunsuanfu[0],this.yunsuanfu[2],this.yunsuanfu[1]]);
+    temArr.push([this.yunsuanfu[1],this.yunsuanfu[0],this.yunsuanfu[2]]);
+    temArr.push([this.yunsuanfu[1],this.yunsuanfu[2],this.yunsuanfu[0]]);
+    temArr.push([this.yunsuanfu[2],this.yunsuanfu[0],this.yunsuanfu[1]]);
+    temArr.push([this.yunsuanfu[2],this.yunsuanfu[1],this.yunsuanfu[0]]);
+    temArr.push([this.yunsuanfu[3],this.yunsuanfu[0],this.yunsuanfu[1]]);
+    temArr.push([this.yunsuanfu[3],this.yunsuanfu[1],this.yunsuanfu[0]]);
+    temArr.push([this.yunsuanfu[0],this.yunsuanfu[1],this.yunsuanfu[3]]);
+    temArr.push([this.yunsuanfu[0],this.yunsuanfu[3],this.yunsuanfu[1]]);
+    temArr.push([this.yunsuanfu[1],this.yunsuanfu[0],this.yunsuanfu[3]]);
+    temArr.push([this.yunsuanfu[1],this.yunsuanfu[3],this.yunsuanfu[0]]);
+    temArr.push([this.yunsuanfu[3],this.yunsuanfu[0],this.yunsuanfu[2]]);
+    temArr.push([this.yunsuanfu[3],this.yunsuanfu[2],this.yunsuanfu[0]]);
+    temArr.push([this.yunsuanfu[0],this.yunsuanfu[2],this.yunsuanfu[3]]);
+    temArr.push([this.yunsuanfu[0],this.yunsuanfu[3],this.yunsuanfu[2]]);
+    temArr.push([this.yunsuanfu[2],this.yunsuanfu[0],this.yunsuanfu[3]]);
+    temArr.push([this.yunsuanfu[2],this.yunsuanfu[3],this.yunsuanfu[0]]);
+    temArr.push([this.yunsuanfu[3],this.yunsuanfu[1],this.yunsuanfu[2]]);
+    temArr.push([this.yunsuanfu[3],this.yunsuanfu[2],this.yunsuanfu[1]]);
+    temArr.push([this.yunsuanfu[1],this.yunsuanfu[2],this.yunsuanfu[3]]);
+    temArr.push([this.yunsuanfu[1],this.yunsuanfu[3],this.yunsuanfu[2]]);
+    temArr.push([this.yunsuanfu[2],this.yunsuanfu[1],this.yunsuanfu[3]]);
+    temArr.push([this.yunsuanfu[2],this.yunsuanfu[3],this.yunsuanfu[1]]);
+    return temArr;
+}
+
+// 混合所有的数字符合括号组合
+p.createAllExprestion=function(arr1){
+var signs =this._getRandomOptIndex();
+var cards =this._getRandomPorkeIndex(arr1);
+var array = [];
+for(var i = 0,j=cards.length;i<j;i++){
+    for(var m = 0, n=signs.length; m < n; m++){
+        for(var q = 0; q < 7; q++){
+            switch(q){
+                case 0:array.push(cards[i][0] + signs[m][0] + cards[i][1] + signs[m][1] +cards[i][2] + signs[m][2] +cards[i][3]); break;
+                case 1:array.push('(' + cards[i][0] + signs[m][0] + cards[i][1] +')' + signs[m][1] +cards[i][2] + signs[m][2] +cards[i][3]); break;
+                case 2:array.push('(' + cards[i][0] + signs[m][0] + cards[i][1] + signs[m][1] +cards[i][2] +')' + signs[m][2] +cards[i][3]); break;
+                case 3:array.push(cards[i][0] + signs[m][0] + '(' +  cards[i][1] + signs[m][1] +cards[i][2] +')' + signs[m][2] +cards[i][3]); break;
+                case 4:array.push(cards[i][0] + signs[m][0] + '(' +  cards[i][1] + signs[m][1] +cards[i][2] + signs[m][2] +cards[i][3]  +')'); break;
+                case 5:array.push(cards[i][0] + signs[m][0] + cards[i][1] + signs[m][1] + '(' + cards[i][2] + signs[m][2] +cards[i][3]  +')'); break;
+                case 6:array.push('(' + cards[i][0] + signs[m][0] + cards[i][1] +')' + signs[m][1] + '(' + cards[i][2] + signs[m][2] +cards[i][3] +')'); break;
+            }
+        }
+    }
+}
+    //进行组装完成后进行24点计算
+    for(var y=0;y<array.length;y++){
+        if(eval(array[y])==24){
+            return array[y];
+        }
+    }    
+}
+    define(function(require,exports,module){module.exports=PorkeGame;})
+})
+define(function(require){
+    //依赖加载 zepto和index模块js
+	var $=require("zepto"),PorkeGame=require("index");
+	var Case=new PorkeGame();
+	var odd=[1,3,5,7];
+	var even=[0,2,4,6];
+	var count=0;
+	var tp = $.fx.cssPrefix + 'transform';
+	var tp2="-webkit-transition";
+	(function(){
+		//发牌
+		 $('#licensing').attr("disabled",true);
+		 $('#result').attr("disabled",true);
+		 $("#shuffle").click(function(){
+				var arr=[];
+					arr=Case.replacement();
+				$('.poker-box li').each(function(index){
+					if($(this).filter(".b")){
+						$(this).filter(".b").css(tp,'perspective(400px) rotateY(0deg)');
+					}
+					if($(this).filter(".a")){
+						$(this).filter(".a").css(tp,'perspective(400px) rotateY(90deg)');
+					}
+				});
+				setTimeout(function(){
+					$.each(even,function(i,n){
+						$(".poker-box li").eq(n).animate({perspective:"400px", rotateY:"-90deg"},1000,'',function(){
+							$('.poker-box li').eq(odd[i]).children().first().attr("src","img/"+arr[i]+".bmp");
+							$(".poker-box  li").eq(odd[i]).css("display","block").animate({perspective:"400px",rotateY:"0deg"},1000,'',
+							function(){
+								//点击洗牌  查看结果
+							  $("#licensing").removeAttr("disabled").text("洗牌");
+							  $("#result").removeAttr("disabled").text("查看结果");
+							}).css(tp,'perspective(400px) rotateY(0deg)');
+								count++;
+						}).css(tp,'perspective(400px) rotateY(-90deg)');
+				 });
+			},1)
+		});
+		//洗牌
+		$('#licensing').click(function(){
+			$("#Shuffle").attr("disabled",true);
+			$("#result").attr("disabled",true);
+			$("#source span").addClass("one");
+			$('.poker-box li').each(function(index){
+				if($(this).filter(".b")){
+					$(this).filter(".b").css(tp,'perspective(400px) rotateY(-90deg)');
+				}
+				if($(this).filter(".a")){
+					$(this).filter(".a").css(tp,'perspective(400px) rotateY(0deg)');
+				}
+			});
+			$("ul li").each(function(index){
+				$("ul li").eq(odd[index]).animate({perspective:"400px",rotateY:"90deg"},1000,'',function(){
+						$("ul li").eq(even[index]).animate({perspective:"400px",rotateY:"0deg"},1000,'',function(){
+					    $("#shuffle").removeAttr("disabled");
+					    $('#licensing').attr("disabled",true).text("洗牌禁用");
+					    $('#result').attr("disabled",true).text("查看结果禁用");
+					});
+				})
+			})
+		})
+		$('#result').click(function(){
+			$("#source span").removeClass("one");
+		})
+  })()
+ })
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<style>
+		    .one{display:none;}
+			#container{width:450px;height:150px;margin:0 auto;}
+			#container .poker-box{position:relative;}
+			#container .poker-box li{display:inline-block;list-style-type:none;}
+			#container .poker-box li:nth-child(2){position:absolute;left:37px;top:0px;display:none;}
+			#container .poker-box li:nth-child(4){position:absolute;left:136px;top:0px;display:none;}
+			#container .poker-box li:nth-child(6){position:absolute;left:235px;top:0px;display:none;}
+			#container .poker-box li:nth-child(8){position:absolute;left:334px;top:0px;display:none;}
+			#PorkeGame{margin:0 auto;width:320px;}
+			#PorkeGame button{width:100px;height:23px;outline:none;line-height:23px;}
+			#source{background-color:white;width:430px;height:90px;border-radius:5px;margin:0 auto;margin-bottom:30px; font-size:70px;}
+			#source span{text-align:center;}
+			 body{background:url(./img/0.jpg);background-size:cover;}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<ul class="poker-box" id="poker-box">
+				<li class="b"><img src="img/pk.bmp"/></li>
+				<li class="a"><img src=""/></li>
+				<li class="b"><img src="img/pk.bmp"/></li>
+				<li class="a"><img src=""/></li>
+				<li class="b"><img src="img/pk.bmp"/></li>
+				<li class="a"><img src=""/></li>
+				<li class="b"><img src="img/pk.bmp"/></li>
+				<li class="a"><img src=""/></li>
+			</ul>
+		</div>
+		<div id="source"><span></span></div>
+		<div id="PorkeGame">
+	　　　　　　　　<button id="shuffle">发牌</button>
+		     <button id="licensing">洗牌</button>
+	             <button id="result">查看结果</button>
+		</div>
+		<script src="sea.js"></script>
+		<script>
+		　　seajs.use("indexZepto");
+		</script>
+	</body>
+</html>
