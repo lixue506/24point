@@ -27,13 +27,41 @@
 #### 设计要求：
 
 - 设计游戏的核心算法；
-
 - 设计可视化的界面； 
-
 - 能随机产生4个1位数并显示；
-
 - 用户能利用鼠标或键盘选择给出的数和运算符；
-
 - 程序能判别正误并计分；
-
 - 能给出帮助和能重产生数  。
+
+# 设计说明
+
+语言版本：Python3.x
+
+安装包：random，flask，importlib,sys,json,traceback，itertools
+
+网站页面版：
+
+文件：\_pcche\_,static,templates,test,tool,web,README
+
+web.py:项目启动文件，端口号为8000，可修改
+
+tool.py：工具函数，用来计算满足随机产生四个数拼凑成24的所有情况
+
+static文件夹，css文件夹存放样式风格设计，fonts文件夹存放字体，img存放背景图片，图标，js文件夹引入必要文件，bootstrap.js\jquery.min.js等
+
+templates文件夹存放前端页面HTML文件，index游戏封面，game游戏页面
+
+运行游戏执行web.py文件
+
+注意：安装 importlib,需要执行mportlib.reload(sys)
+
+24_ponit_addr:
+
+文件：\_pycache\_,fonts,game_addr,modules,
+
+modules:定义页面组件
+
+安装包：copy， random， pygame,  os, sys, fractions包
+
+启动游戏运行game_addr.py,
+

@@ -214,7 +214,7 @@ def main():
 			showInfo('Congratulations 100%', screen)
 		# 游戏失败
 		if not is_win and len(game24_gen.numbers_now) == 1:
-			score = float(game24_gen.numbers_now[0] % 24) / 24 * 100
+			score = (int(game24_gen.numbers_now[0]) % 24) / 24 * 100
 			str = 'Game over {}%'.format(round(score,2))
 			showInfo(str, screen)
 		pygame.display.flip()
