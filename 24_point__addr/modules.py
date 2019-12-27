@@ -113,7 +113,6 @@ class game24Generator():
 			for key, value in solution.items():
 				if float(value) == self.target:
 					answers.append(key)
-		# 避免有数字重复时表达式重复(T_T懒得优化了)
 		answers = list(set(answers))
 		return answers
 	'''递归枚举'''

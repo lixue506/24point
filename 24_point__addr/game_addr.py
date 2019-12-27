@@ -19,10 +19,7 @@ PALETURQUOISE = (175, 238, 238)
 PAPAYAWHIP = (255, 239, 213)
 CURRENTPATH = os.path.abspath(os.path.dirname(__file__))
 FONTPATH = os.path.join(CURRENTPATH, 'fonts/font.ttf')
-AUDIOWINPATH = os.path.join(CURRENTPATH, 'audios/win.wav')
-AUDIOLOSEPATH = os.path.join(CURRENTPATH, 'audios/lose.wav')
-AUDIOWARNPATH = os.path.join(CURRENTPATH, 'audios/warn.wav')
-BGMPATH = os.path.join(CURRENTPATH, 'audios/bgm.mp3')
+
 # 数字卡片
 # --数字卡片字体颜色
 NUMBERFONT_COLORS = [BLACK, RED]
@@ -94,7 +91,7 @@ def checkClicked(group, mouse_pos, group_type='NUMBER'):
 	return selected
 
 
-'''获取数字精灵组'''
+'''获取数字组'''
 def getNumberSpritesGroup(numbers):
 	number_sprites_group = pygame.sprite.Group()
 	for idx, number in enumerate(numbers):
@@ -103,7 +100,7 @@ def getNumberSpritesGroup(numbers):
 	return number_sprites_group
 
 
-'''获取运算符精灵组'''
+'''获取运算符组'''
 def getOperatorSpritesGroup(operators):
 	operator_sprites_group = pygame.sprite.Group()
 	for idx, operator in enumerate(operators):
@@ -112,7 +109,7 @@ def getOperatorSpritesGroup(operators):
 	return operator_sprites_group
 
 
-'''获取按钮精灵组'''
+'''获取按钮组'''
 def getButtonSpritesGroup(buttons):
 	button_sprites_group = pygame.sprite.Group()
 	for idx, button in enumerate(buttons):
@@ -149,15 +146,9 @@ def main():
 	pygame.mixer.init()
 	screen = pygame.display.set_mode(SCREENSIZE)
 	pygame.display.set_caption('24 point')
-	# win_sound = pygame.mixer.Sound(AUDIOWINPATH)
-	# lose_sound = pygame.mixer.Sound(AUDIOLOSEPATH)
-	# warn_sound = pygame.mixer.Sound(AUDIOWARNPATH)
-	# pygame.mixer.music.load(BGMPATH)
-	# pygame.mixer.music.play(-1, 0.0)
 	# 24点游戏生成器
 	game24_gen = game24Generator()
 	game24_gen.generate()
-	# 精灵组
 	# --数字
 	number_sprites_group = getNumberSpritesGroup(game24_gen.numbers_now)
 	# --运算符
@@ -200,12 +191,12 @@ def main():
 			result = calculate(selected_number1, selected_number2, *selected_operators)
 			if result is not None:
 				game24_gen.numbers_now = noselected_numbers + [result]
-				is_win = game24_gen.check()
+				is_win= game24_gen.check()
 
 			selected_numbers = []
 			selected_operators = []
 			number_sprites_group = getNumberSpritesGroup(game24_gen.numbers_now)
-		# 精灵都画到screen上
+		# 画到screen上
 		for each in number_sprites_group:
 			each.draw(screen, pygame.mouse.get_pos())
 		for each in operator_sprites_group:
@@ -220,10 +211,12 @@ def main():
 			each.draw(screen, pygame.mouse.get_pos())
 		# 游戏胜利
 		if is_win:
-			showInfo('Congratulations', screen)
+			showInfo('Congratulations 100%', screen)
 		# 游戏失败
 		if not is_win and len(game24_gen.numbers_now) == 1:
-			showInfo('Game Over', screen)
+			score = float(game24_gen.numbers_now[0] % 24) / 24 * 100
+			str = 'Game over {}%'.format(round(score,2))
+			showInfo(str, screen)
 		pygame.display.flip()
 		clock.tick(30)
 

@@ -57,7 +57,7 @@
 							<a href="https://github.com/lixue506/24point" class="dropdown-toggle" data-toggle="dropdown">about</a>
                         </li>
                         <li class="dropdown">
-							<a href="index.html" class="dropdown-toggle" data-toggle="dropdown">BACK</a>
+							<a href="index" class="dropdown-toggle" data-toggle="dropdown">BACK</a>
                         </li>
                     </ul>
                 </div>
@@ -71,10 +71,9 @@
                 <form name="random_num"></form>
                 <input id="cal">
                 <ul >
-                <a class="btn homebtn smoothScroll">START</a>
                 <a class="btn homebtn smoothScroll" onclick="location=location" id="reset">RESET</a>
-                <a class="btn homebtn smoothScroll" id="submit" onclick="func()">SUBMIT</a>
-                <a class="btn homebtn smoothScroll" id="help">HELP</a>
+                <a class="btn homebtn smoothScroll" id="submit" onclick="sub()">SUBMIT</a>
+                <a class="btn homebtn smoothScroll" id="help" onclick="help()">HELP</a>
                 <a class="btn homebtn smoothScroll" id="back">BACK</a>
                 </ul>
 	 		</div>
@@ -87,26 +86,42 @@
         var str_html = document.createElement("input");
         str_html.type = "button";
         str_html.class = "num_cal";
+        str_html.id = "num_cal"+i;
         if(i < 6){str_html.value = ope[i];}
-        else{str_html.value = Math.floor(Math.random()*10+1);}
+        else{var t = Math.floor(Math.random()*10+1);
+                str_html.value=t;
+                if(t==0){str_html.value=t+1;}
+                if(t==10){str_html.value=t-1};}
         document.random_num.appendChild(str_html);
     }
 </script>
 <script>
-function func() {
+function sub() {
         $.ajax({
-            url:'/game',
+            url:'/game_sub',
             type:'GET',
-            data:{'a':$('cal_a').val(),'b':$("cal_b").val(), 'cal':$("cal").val()},
+            data:{'cal':$('#cal').val()},
             dataType:'json',
             success:function (data) {
-                str = ''
-                for (var item in data) {
-                   str = str + "<tr><th>"+data[item].id+"</th><th>"+data[item].times+"</th><th>"+data[item].name+"</th><th>"+data[item].score+"</th><th>"+data[item].rank+"</th><th>"+data[item].click+"</th></tr>"
-                }$('#get_result').html(str)
+                alert(data['result']);
             },
             error:function () {
+                alert($('#cal').val());
                 alert("ERROR!");
+            }
+        })
+    }
+    function help() {
+        $.ajax({
+            url:'/game_help',
+            type:'GET',
+            data:{'num6':$('#num_cal6').val(),'num7':$('#num_cal7').val(),'num8':$('#num_cal8').val(),'num9':$('#num_cal9').val()},
+            dataType:'json',
+            success:function (data) {
+                alert(data['all_result'])
+            },
+            error:function () {
+                alert("SERVER ERROR!");
             }
         })
     }
